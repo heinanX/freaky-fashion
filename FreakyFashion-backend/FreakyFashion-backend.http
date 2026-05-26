@@ -1,0 +1,32 @@
+@FreakyFashion_backend_HostAddress = https://localhost:5000
+
+GET {{FreakyFashion_backend_HostAddress}}/api/product
+Accept: application/json
+
+### ------------  CATEGORY
+
+GET {{FreakyFashion_backend_HostAddress}}/api/category
+Accept: application/json
+
+### BY ID
+
+GET {{FreakyFashion_backend_HostAddress}}/api/category/5
+Accept: application/json
+
+### BY SEARCH
+
+GET {{FreakyFashion_backend_HostAddress}}/api/category?slug=t-shirt
+Accept: application/json
+
+### CREATE
+Post {{FreakyFashion_backend_HostAddress}}/api/category
+Content-Type: application/json
+
+{
+  "name": "sun dresses",
+  "image": "/images/sun-dress.png"
+}
+
+### DELETE
+
+DELETE {{FreakyFashion_backend_HostAddress}}/api/category/3
