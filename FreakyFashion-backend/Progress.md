@@ -33,8 +33,15 @@ Did a test run and everything seems to be working fine.
 
 ..
 
-# 6. Create a Product --in progress
+# 6. Create CRUD methods for Product --TASK COMPLETED
+Title pretty much says it all. I've successfully implemented CRUD methods for the Product entity. Did a test run and they're all
+working as expected with a minor adjustment to the Create method. Instead of serching the database for an exact match
+it's now looking for partial matches, making the search function more flexible and user-friendly.
 
+
+..
+
+# 6. Connect it to Azure for cloud based storage --in progress
 
 .
 .

@@ -3,6 +3,34 @@
 GET {{FreakyFashion_backend_HostAddress}}/api/product
 Accept: application/json
 
+### BY ID
+
+GET {{FreakyFashion_backend_HostAddress}}/api/product/4
+Accept: application/json
+
+### BY SEARCH
+
+GET {{FreakyFashion_backend_HostAddress}}/api/product?slug=t-shirt
+Accept: application/json
+
+### CREATE
+Post {{FreakyFashion_backend_HostAddress}}/api/product
+Content-Type: application/json
+
+
+{
+  "name": "green T-Shirt",
+  "description": "A classic green t-shirt.",
+  "price": 199,
+  "image": "/images/green-t-shirt.png",
+  "categories": [1]
+}
+
+### DELETE
+
+DELETE {{FreakyFashion_backend_HostAddress}}/api/product/3
+
+
 ### ------------  CATEGORY
 
 GET {{FreakyFashion_backend_HostAddress}}/api/category
@@ -15,7 +43,7 @@ Accept: application/json
 
 ### BY SEARCH
 
-GET {{FreakyFashion_backend_HostAddress}}/api/category?slug=t-shirt
+GET {{FreakyFashion_backend_HostAddress}}/api/category?slug=t-shirts
 Accept: application/json
 
 ### CREATE

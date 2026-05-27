@@ -43,7 +43,7 @@ namespace FreakyFashion_backend.Data.Repos
         {
             List<Category> categories = await _db.Categories
                .Include(c => c.Products)
-               .Where(c => c.UrlSlug == slug)
+               .Where(c => c.UrlSlug.Contains(slug))
                .ToListAsync();
 
             return categories.Select(CategoryMapper.ToDto).ToList();
@@ -58,6 +58,11 @@ namespace FreakyFashion_backend.Data.Repos
             if (category == null) throw new KeyNotFoundException($"Category with ID {id} not found.");
 
             return CategoryMapper.ToDto(category);
+        }
+
+        public async Task<List<Category>> GetCategoriesByIdsAsync(List<int> ids)
+        {
+            return await _db.Categories.Where(c => ids.Contains(c.Id)).ToListAsync();
         }
     }
 }

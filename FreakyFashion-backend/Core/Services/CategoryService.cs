@@ -2,6 +2,7 @@
 using FreakyFashion_backend.Data.Models;
 using FreakyFashion_backend.Data.Repos.Interfaces;
 using FreakyFashion_backend.DTOs.Categories;
+using FreakyFashion_backend.Helpers;
 
 namespace FreakyFashion_backend.Core.Services
 {
@@ -14,16 +15,10 @@ namespace FreakyFashion_backend.Core.Services
             _categoryRepo = categoryRepo;
         }
 
-        private string slugifyName(string name)
-        {
-            string urlSlug = name.Replace(" ", "-");
-            return urlSlug;
-        }
-
         public async Task CreateCategoryAsync(CreateCategoryDto dto)
         {
             string categoryName = dto.Name.ToLower().Trim();
-            string urlSlug = slugifyName(categoryName);
+            string urlSlug = HelperMethods.SlugifyName(categoryName);
             Category newCategory = new()
             {
                 CategoryName = categoryName,

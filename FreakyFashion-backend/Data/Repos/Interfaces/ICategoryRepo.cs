@@ -10,4 +10,5 @@ public interface ICategoryRepo
     Task<List<CategoryDto>> GetCategoriesBySlugAsync(string slug);
     Task CreateCategoryAsync(Category createCategoryDto);
     Task DeleteCategoryAsync(int id);
+    Task<List<Category>> GetCategoriesByIdsAsync(List<int> ids);
 }

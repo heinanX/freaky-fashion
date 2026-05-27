@@ -1,43 +1,64 @@
 ﻿using FreakyFashion_backend.Data.Models;
 using FreakyFashion_backend.Data.Repos.Interfaces;
 using FreakyFashion_backend.DTOs.Products;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.EntityFrameworkCore;
 
 namespace FreakyFashion_backend.Data.Repos
 {
     public class ProductRepo : IProductRepo
     {
-        public Task CreateProductAsync(CreateProductDto createProductDto)
+
+        private readonly FreakyFashionDbContext _db;
+
+        public ProductRepo(FreakyFashionDbContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
+        }
+        public async Task CreateProductAsync(Product newProduct)
+        {
+            await _db.Products.AddAsync(newProduct);
+            await _db.SaveChangesAsync();
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            Product? product = await _db.Products.FindAsync(id);
+            if (product == null) throw new KeyNotFoundException($"Product with ID {id} not found.");
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
         }
 
         public async Task<List<ProductDto>> GetAllProductsAsync()
         {
-            Console.WriteLine("I got in here");
-            var products = new List<ProductDto>
-    {
-        new ProductDto { Id = 1, Name = "Black T-Shirt", Description = "A classic black t-shirt.", Price = 199, Image = "/images/black-t-shirt.png", UrlSlug = "black-t-shirt" },
-        new ProductDto { Id = 2, Name = "White T-Shirt", Description = "A clean white t-shirt.", Price = 199, Image = "/images/white-t-shirt.png", UrlSlug = "white-t-shirt" },
-        new ProductDto { Id = 3, Name = "Blue Jeans", Description = "Slim fit blue jeans.", Price = 499, Image = "/images/blue-jeans.png", UrlSlug = "blue-jeans" }
-    };
+            List<Product> products = await _db.Products
+                            .Include(c => c.Categories)
+                            .ToListAsync();
 
-            return products;
+            return products.Select(ProductMapper.ToDto).ToList();
         }
 
-        public Task<ProductDto> GetProductByIdAsync(int id)
+        public async Task<ProductDto> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            Product? product = await _db.Products
+                .Include(p => p.Categories)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return product != null ?
+                ProductMapper.ToDto(product)
+                :
+                throw new KeyNotFoundException($"Product with ID {id} not found.");
+
         }
 
-        public Task<List<ProductDto>> GetProductsBySlugAsync(string slug)
+        public async Task<List<ProductDto>> GetProductsBySlugAsync(string slug)
         {
-            throw new NotImplementedException();
+            List<Product> products = await _db.Products
+                          .Include(p => p.Categories)
+                          .Where(p => p.UrlSlug.Contains(slug))
+                          .ToListAsync();
+
+            return products.Select(ProductMapper.ToDto).ToList();
         }
     }
 }
