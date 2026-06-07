@@ -43,23 +43,21 @@ public class CategoryController : ControllerBase
 
 
     [HttpPost]
-    //[Authorize]
     public async Task<ActionResult> Post([FromBody] CreateCategoryDto dto)
     {
         try
         {
-            await _categoryService.CreateCategoryAsync(dto);
-            return Created();
+            CategoryDto response = await _categoryService.CreateCategoryAsync(dto);
+            return Created("", response);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { message = ex.Message });
         }
     }
 
 
     [HttpDelete("{id}")]
-    //[Authorize]
     public async Task<ActionResult> Delete(int id)
     {
         try
@@ -72,27 +70,5 @@ public class CategoryController : ControllerBase
             return NotFound(ex.Message);
         }
     }
-
-    // For a higher grade, make this update the whole product: PATCH /api/products/{id}
-
-    //[HttpPatch("{id}")]
-    //public async Task<ActionResult> Patch(int id, [FromBody] UpdateResourceDto dto)
-    //{
-    //}
-
-    // For a higher grade, Delete Product from Category: DELETE /api/categories/{categoryID}/products/{productId}
-
-    [HttpDelete("{categoryId}/products/{productId}")]
-    public async Task<ActionResult> Delete(int categoryId, int productId)
-    {
-        try
-        {
-            Console.WriteLine(productId);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-    }
+  
 }

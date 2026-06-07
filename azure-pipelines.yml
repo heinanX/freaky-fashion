@@ -1,0 +1,49 @@
+﻿trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: "Release"
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Restore NuGet packages"
+            inputs:
+              command: "restore"
+              projects: "FreakyFashion-backend/FreakyFashion-backend.csproj"
+
+          - script: dotnet build FreakyFashion-backend/FreakyFashion-backend.csproj --configuration $(buildConfiguration)
+            displayName: "dotnet build"
+
+          - script: dotnet publish FreakyFashion-backend/FreakyFashion-backend.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+            displayName: "dotnet publish"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish artifact"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              artifactName: "drop"
+              downloadPath: "$(System.ArtifactsDirectory)"
+
+          - task: AzureWebApp@1
+            displayName: "Deploy to Azure App Service"
+            inputs:
+              azureSubscription: "AzureConnection"
+              appType: "webAppLinux"
+              appName: "freakyfashion-api"
+              package: "$(System.ArtifactsDirectory)/drop"

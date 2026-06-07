@@ -41,7 +41,7 @@ it's now looking for partial matches, making the search function more flexible a
 
 ..
 
-# 6. Connect it to Azure for cloud based storage --in progress
+# 6. Connect to Azure for cloud based storage --in progress
 
 .
 .

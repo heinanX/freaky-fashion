@@ -15,7 +15,7 @@ namespace FreakyFashion_backend.Core.Services
             _categoryRepo = categoryRepo;
         }
 
-        public async Task CreateCategoryAsync(CreateCategoryDto dto)
+        public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto dto)
         {
             string categoryName = dto.Name.ToLower().Trim();
             string urlSlug = HelperMethods.SlugifyName(categoryName);
@@ -26,7 +26,8 @@ namespace FreakyFashion_backend.Core.Services
                 UrlSlug = urlSlug
             };
 
-            await _categoryRepo.CreateCategoryAsync(newCategory);
+            Category response = await _categoryRepo.CreateCategoryAsync(newCategory);
+            return CategoryMapper.ToDto(response);
         }
 
         public async Task DeleteCategoryAsync(int id)

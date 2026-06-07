@@ -8,6 +8,6 @@ public interface IProductRepo
     Task<List<ProductDto>> GetAllProductsAsync();
     Task<ProductDto> GetProductByIdAsync(int id);
     Task<List<ProductDto>> GetProductsBySlugAsync(string slug);
-    Task CreateProductAsync(Product newProduct);
+    Task<Product> CreateProductAsync(Product newProduct);
     Task DeleteProductAsync(int id);
 }

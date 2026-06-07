@@ -18,7 +18,7 @@ public class ProductService : IProductService
         _categoryRepo = categoryRepo;
     }
 
-    public async Task CreateProductAsync(CreateProductDto dto)
+    public async Task<ProductDto> CreateProductAsync(CreateProductDto dto)
     {
         List<Category> categoryIds = await _categoryRepo.GetCategoriesByIdsAsync(dto.Categories);
         if (categoryIds.Count != dto.Categories.Count)
@@ -35,7 +35,9 @@ public class ProductService : IProductService
             UrlSlug = urlSlug,
             Categories = categoryIds
         };
-        await _productRepo.CreateProductAsync(newProduct);
+        Product createdProduct = await _productRepo.CreateProductAsync(newProduct);
+
+        return ProductMapper.ToDto(createdProduct);
     }
 
     public async Task DeleteProductAsync(int id)

@@ -15,7 +15,6 @@ namespace FreakyFashion.Controllers
             _productService = productService;
         }
 
-        // For a higher grade, make this paginated: GET /api/products[?page=1&pageSize=10]
         [HttpGet]
         public async Task<ActionResult> Get([FromQuery] string? slug)
         {
@@ -48,32 +47,21 @@ namespace FreakyFashion.Controllers
 
 
         [HttpPost]
-        //[Authorize]
         public async Task<ActionResult> Post([FromBody] CreateProductDto dto)
         {
             try
             {
-                await _productService.CreateProductAsync(dto);
-                return Created();
+                ProductDto response = await _productService.CreateProductAsync(dto);
+                return Created("", response);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
-                // write why the bad request was made, i.e . missing fields, invalid data, etc.
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        // For a higher grade, make this update the whole product: PATCH /api/products/{id}
-
-        //[HttpPatch("{id}")]
-        //[Authorize]
-        //public async Task<ActionResult> Patch(int id, [FromBody] UpdateResourceDto dto)
-        //{
-        //}
-
 
         [HttpDelete("{id}")]
-        //[Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             try

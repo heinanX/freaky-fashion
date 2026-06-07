@@ -15,10 +15,11 @@ namespace FreakyFashion_backend.Data.Repos
             _db = db;
         }
 
-        public async Task CreateCategoryAsync(Category category)
+        public async Task<Category> CreateCategoryAsync(Category newCategory)
         {
-            await _db.Categories.AddAsync(category);
+            await _db.Categories.AddAsync(newCategory);
             await _db.SaveChangesAsync();
+            return newCategory;
         }
 
         public async Task DeleteCategoryAsync(int id)

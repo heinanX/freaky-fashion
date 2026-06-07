@@ -14,10 +14,11 @@ namespace FreakyFashion_backend.Data.Repos
         {
             _db = db;
         }
-        public async Task CreateProductAsync(Product newProduct)
+        public async Task<Product> CreateProductAsync(Product newProduct)
         {
             await _db.Products.AddAsync(newProduct);
             await _db.SaveChangesAsync();
+            return newProduct;
         }
 
         public async Task DeleteProductAsync(int id)
